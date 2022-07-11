@@ -71,8 +71,10 @@ class Note
 class Classe
 {
     public string nomClasse { get; private set; }
-    public Eleve[] eleves = new Eleve[30];
-    public string[] matieres = new string[10];
+    public List<Eleve> eleves = new List<Eleve> ();
+    public List<string> matieres = new List<string> ();
+    public int[] maxEleve = new int[30];
+    public int[] maxMatiere = new int[10];
     public int compteEleve = 0;
     public int compteMatiere = 0;
 
@@ -83,18 +85,35 @@ class Classe
     }
     public void ajouterEleve(string prenom, string nom)
     {
-        
-            eleves[compteEleve] = new Eleve(prenom + " " + nom);
+        try
+        {
+            eleves.Add(new Eleve(prenom + " " + nom));
+            maxEleve[compteEleve] = 1;
             compteEleve++;
+        }
+
+        catch (Exception)
+        {
+            Console.WriteLine("Erreur nombre élèves");
+        }
+        
+        
             
         
         
     }
     public void ajouterMatiere(string matiere)
     {
- 
-        matieres[compteMatiere] = matiere;
-        compteMatiere++;
+        try
+        {
+            matieres.Add(matiere);
+            maxMatiere[compteMatiere] = 1;
+            compteMatiere++;
+        }
+        catch (Exception)
+        {
+            Console.WriteLine("Erreur nombre Matière");
+        }
         
 
 
@@ -102,22 +121,33 @@ class Classe
 
     public string Moyenne(int matiere)
     {
-        float somme = 0;
+        float sommeEleve = 0;
+        float sommeClasse = 0;
         int nbNotes = 0;
-        float moyenne = 0;
+        int nbEleves = 0;
+        float moyenneEleve = 0;
+        float moyenneClasse = 0;
         foreach (Eleve eleve in eleves)
         {
+            sommeEleve = 0;
+            nbNotes = 0;
             foreach (Note note in eleve.notes)
             {
                 if (note.matiere == matiere)
                 {
-                    somme = somme + note.note;
-                    nbNotes++;
+                        sommeEleve = sommeEleve + note.note;
+                        nbNotes++;
                 }
+               
             }
+            moyenneEleve = sommeEleve / nbNotes;
+            sommeClasse = sommeClasse + moyenneEleve;
+            nbEleves++;
+
+
         }
-        moyenne = somme / nbNotes;
-        string strMoyenne = String.Format("{0:N2}", moyenne);
+        moyenneClasse = sommeClasse / nbEleves;
+        string strMoyenne = String.Format("{0:N2}", moyenneClasse);
         return strMoyenne;
 
 
@@ -126,21 +156,30 @@ class Classe
     }
     public string Moyenne()
     {
-        float somme = 0;
+        float sommeEleve = 0;
+        float sommeClasse = 0;
         int nbNotes = 0;
-        float moyenne = 0;
+        int nbEleves = 0;
+        float moyenneEleve = 0;
+        float moyenneClasse = 0;
         foreach (Eleve eleve in eleves)
         {
+            sommeEleve = 0;
+            nbNotes = 0;
             foreach (Note note in eleve.notes)
             {
-                somme = somme + note.note;
+                sommeEleve = sommeEleve + note.note;
                 nbNotes++;
 
             }
+            moyenneEleve = sommeEleve / nbNotes;
+            sommeClasse = sommeClasse + moyenneEleve;
+            nbEleves++;
+
 
         }
-        moyenne = somme / nbNotes;
-        string strMoyenne = String.Format("{0:N2}", moyenne);
+        moyenneClasse = sommeClasse / nbEleves;
+        string strMoyenne = String.Format("{0:N2}", moyenneClasse);
         return strMoyenne;
     }
 }
@@ -149,7 +188,9 @@ class Eleve
     public string prenom { get; private set; }
     public string nom { get; private set; }
 
-    public Note[] notes = new Note[200];
+    public List<Note> notes = new List<Note> ();
+
+    public int[] maxNotes = new int[200];
 
     public int compteNote = 0;
 
@@ -159,11 +200,20 @@ class Eleve
         prenom = nomSepare[0];
         nom = nomSepare[1];
     }
-    public int ajouterNote(Note nvlNote)
+    public void ajouterNote(Note nvlNote)
     {
-        notes[compteNote] = nvlNote;
-        compteNote++;
-        return compteNote;
+        try
+        {
+            notes.Add(nvlNote);
+            maxNotes[compteNote] = 1; 
+            compteNote++;
+
+        }
+        catch (Exception)
+        {
+            Console.WriteLine("Erreur nombre notes");
+        }
+        
 
     }
 
